@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using GameReviewChat.Hubs;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -25,7 +26,19 @@ namespace GameReviewChat
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(options =>
+            {
+                options.AddPolicy("umuPolicy", policy =>
+                {
+                    policy.AllowAnyHeader().AllowAnyMethod()
+                          .WithOrigins("https://localhost:44346", "http://localhost:44346")
+                          .AllowCredentials();
+                });
+
+                //options.AddPolicy("CorsPolicy", builder => builder.WithOrigins("https://localhost:44346", "http://localhost:44346").AllowAnyMethod().AllowAnyHeader().AllowCredentials().Build());
+            });
             services.AddControllers();
+            services.AddSignalR();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -40,11 +53,14 @@ namespace GameReviewChat
 
             app.UseRouting();
 
+            app.UseCors("umuPolicy");
+
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHub<ChatHub>("/chatsocket");   // path will look like this https://localhost:44332/chatsocket
             });
         }
     }

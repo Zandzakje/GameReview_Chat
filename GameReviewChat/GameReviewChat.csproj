@@ -8,5 +8,9 @@
     <PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.1.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\GameReviewChat_Data\GameReviewChat_Data.csproj" />
+  </ItemGroup>
+
 
 </Project>

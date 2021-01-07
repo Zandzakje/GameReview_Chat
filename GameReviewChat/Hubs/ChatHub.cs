@@ -10,7 +10,7 @@ namespace GameReviewChat.Hubs
     {
         public Task SendMessage(string username, string message)
         {
-            return Clients.All.SendAsync("ReceiveOne", username, message);
+            return Clients.All.SendAsync("ReceiveMessage", username, message);
         }
     }
 }
